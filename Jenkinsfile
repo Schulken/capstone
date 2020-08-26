@@ -7,7 +7,7 @@ pipeline {
           dockerImage = '' 
       } 
       stages { 
-         stage ("lint dockerfile") { 
+         stage ("Lint Dockerfile") { 
                agent { 
                    docker { 
                        image 'hadolint/hadolint:latest-debian' 
@@ -23,14 +23,14 @@ pipeline {
                    } 
                } 
          } 
-         stage('Prepare docker image') { 
+         stage('Build Docker Image') { 
               steps{ 
                    script { 
                      dockerImage = docker.build registry 
                    } 
               } 
          } 
-         stage('Deploy Image') { 
+         stage('Upload/Deploy Image') { 
             steps{ 
                  script { 
                      docker.withRegistry( '', registryCredential ) { 
@@ -45,7 +45,7 @@ pipeline {
               sh "docker rmi $registry:$BUILD_NUMBER" 
             } 
           } 
-           stage('Deploy kubernetes') { 
+           stage('Deploy Kubernetes') { 
                 steps { 
                      checkout scm 
                     withAWS(region:'us-east-2',credentials:'schulken') { 
