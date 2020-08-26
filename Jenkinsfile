@@ -7,6 +7,16 @@ pipeline {
           dockerImage = '' 
       } 
       stages { 
+         stage('Build') {
+              steps {
+                  sh 'echo Building...'
+              }
+         }
+         stage('Lint HTML') {
+              steps {
+                  sh 'tidy -q -e *.html'
+              }
+         }
          stage ("Lint Dockerfile") { 
                agent { 
                    docker { 
@@ -30,7 +40,7 @@ pipeline {
                    } 
               } 
          } 
-         stage('Upload/Deploy Image') { 
+         stage('Push Docker Image') { 
             steps{ 
                  script { 
                      docker.withRegistry( '', registryCredential ) { 
@@ -54,5 +64,11 @@ pipeline {
                      } 
                 } 
            } 
+            stage("Cleaning up") {
+              steps{
+                    echo 'Cleaning up...'
+                    sh "docker system prune"
+              }
+           }
       } 
  } 
