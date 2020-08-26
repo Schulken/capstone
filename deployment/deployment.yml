@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: capstone
+  labels:
+    app: capstone
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: capstone
+  template:
+    metadata:
+      labels:
+        app: capstone
+    spec:
+      containers:
+      - name: capstone
+        image: schulken/capstone:latest
+        ports:
+        - containerPort: 80
