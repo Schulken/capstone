@@ -20,7 +20,7 @@ pipeline {
          stage('Lint Dockerfile') { 
              steps { 
                  script { 
-                     docker.image('hadolint/hadolint:latest-debian').inside() { 
+                     docker.image('hadolint/hadolinte:latest-debian').inside() { 
                              sh 'hadolint ./Dockerfile | tee -a hadolint_lint.txt' 
                              sh ''' 
                                  lintErrors=$(stat --printf="%s"  hadolint_lint.txt) 
@@ -39,7 +39,7 @@ pipeline {
          stage('Build Docker Image') { 
               steps{ 
                    script { 
-                     dockerImage = docker.builde registry 
+                     dockerImage = docker.build registry 
                    } 
               } 
          } 
@@ -47,7 +47,7 @@ pipeline {
             steps{ 
                  script { 
                      docker.withRegistry( '', registryCredential ) { 
-                          dockerImage.push("$BUILD_NUMBER") 
+                         dockerImage.push("$BUILD_NUMBER") 
                          dockerImage.push("latest") 
                      } 
                  } 
