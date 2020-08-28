@@ -65,6 +65,7 @@ pipeline {
                       sh "aws eks --region us-east-2 update-kubeconfig --name capstone2"
                       sh "kubectl config use-context arn:aws:eks:us-east-2:526933929369:cluster/capstone2"
                       sh "kubectl apply -f deployment/deployment.yml"
+                      sh "kubectl apply -f deployment/deployment-service.yml"  
                       sh "kubectl get nodes"
                       sh "kubectl get deployment"
                       sh "kubectl get pod -o wide"
