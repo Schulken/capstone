@@ -61,7 +61,7 @@ pipeline {
            stage('Deploy Kubernetes') { 
                 steps { 
                     checkout scm 
-                    withAWS(region:'us-east-2',credentials:'Udacity Course') { 
+                    withAWS(region:'us-east-2') { 
                           sh "/var/lib/jenkins/kubectl apply -f deployment.yml" 
                           sh "/var/lib/jenkins/kubectl apply -f deployment-service.yml"     
                      } 
