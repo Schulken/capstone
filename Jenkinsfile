@@ -68,6 +68,7 @@ pipeline {
                       sh "kubectl get nodes"
                       sh "kubectl get deployment"
                       sh "kubectl get pod -o wide"
+                      sh "kubectl get service/capstone"
                   }
               }
         }
