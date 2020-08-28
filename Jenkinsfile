@@ -58,15 +58,20 @@ pipeline {
               sh "docker rmi $registry:$BUILD_NUMBER" 
             } 
           } 
-           stage('Deploy Kubernetes') { 
-                steps { 
-                    checkout scm 
-                    withAWS(region:'us-east-2') { 
-                          sh "/var/lib/jenkins/kubectl apply -f deployment.yml" 
-                          sh "/var/lib/jenkins/kubectl apply -f deployment-service.yml"     
-                     } 
-                } 
-           } 
+           stage('Deploying') {
+              steps{
+                  echo 'Deploying to AWS...'
+                  withAWS(credentials: 'aws', region: 'us-east-2') {
+                      sh "aws eks --region us-east-2 update-kubeconfig --name capstone2"
+                      sh "kubectl config use-context arn:aws:eks:us-east-2:526933929369:cluster/capstone2"
+                      sh "kubectl apply -f deployment/deployment.yml"
+                      sh "kubectl get nodes"
+                      sh "kubectl get deployment"
+                      sh "kubectl get pod -o wide"
+                      sh "kubectl get service/capstone"
+                        }
+                  }
+            }
             stage("Cleaning up") {
               steps{
                     echo 'Cleaning up...'
